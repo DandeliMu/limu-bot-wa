@@ -15,12 +15,6 @@ client.on('authenticated', (session) => {
 client.on('qr', (qr) => {
     // qrcode.generate(qr, { small: true });
     console.log(qr);
-    var http = require('http');
-
-http.createServer(function (req, res) {
-  res.write(qr);
-  res.end();
-}).listen(8080);
 });
 
 client.on('ready', () => {
