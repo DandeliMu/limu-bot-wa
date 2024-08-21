@@ -1,9 +1,5 @@
 require('dotenv').config();
 
-const express = require('express')
-const app = express()
-const port = 3000
-
 // const keep_alive = require('./keep_alive.js');
 
 const qrcode = require('qrcode-terminal');
@@ -12,20 +8,11 @@ const client = require('./utility/client');
 // Load command handler
 const commands = require('./utility/commandHandler');
 
-let qrcd = '';
 client.on('qr', (qr) => {
-    // qrcode.generate(qr, { small: true });
+    qrcode.generate(qr, { small: true });
     // console.log(qr);
-    qrcd = qr;
 });
 
-app.get('/', (req, res) => {
-    res.send(qrcd);
-});
-
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-  })
 client.on('authenticated', (session) => {
     console.log('Authenticated:', session);
 });
@@ -33,7 +20,6 @@ client.on('authenticated', (session) => {
 client.on('qr', (qr) => {
     // qrcode.generate(qr, { small: true });
     console.log(qr);
-    
 });
 
 client.on('ready', () => {
