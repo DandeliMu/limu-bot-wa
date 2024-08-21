@@ -1,5 +1,9 @@
 require('dotenv').config();
 
+const express = require('express')
+const app = express()
+const port = 3000
+
 const keep_alive = require('./keep_alive.js');
 
 const qrcode = require('qrcode-terminal');
@@ -8,14 +12,22 @@ const client = require('./utility/client');
 // Load command handler
 const commands = require('./utility/commandHandler');
 
-client.on('authenticated', (session) => {
-    console.log('Authenticated:', session);
-});
-
+let qrcd = '';
 client.on('qr', (qr) => {
     // qrcode.generate(qr, { small: true });
-    console.log(qr);
-    
+    // console.log(qr);
+    qrcd = qr;
+});
+
+app.get('/', (req, res) => {
+    res.send(qrcd);
+});
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+  })
+client.on('authenticated', (session) => {
+    console.log('Authenticated:', session);
 });
 
 client.on('ready', () => {
@@ -38,10 +50,10 @@ client.on('message', async (message) => {
             chat.sendStateTyping();
             messageBody = messageBody.replace(/@\d+/g, '').trim();
             const sender = isGroup ? message.author : message.from;
-            // const response = await sendMessage(sender, messageBody);
+            const response = await sendMessage(sender, messageBody);
 
-            // await message.reply(response);
-            await message.reply(messageBody);
+            await message.reply(response);
+            // await message.reply(messageBody);
         } catch (error) {
             console.error('Error processing message:', error);
         }
