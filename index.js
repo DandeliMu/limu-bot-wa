@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const keep_alive = require('./keep_alive.js');
+// const keep_alive = require('./keep_alive.js');
 
 const qrcode = require('qrcode-terminal');
 const { initialize, sendMessage } = require('./ai');
@@ -28,6 +28,12 @@ app.listen(port, () => {
   })
 client.on('authenticated', (session) => {
     console.log('Authenticated:', session);
+});
+
+client.on('qr', (qr) => {
+    // qrcode.generate(qr, { small: true });
+    console.log(qr);
+    
 });
 
 client.on('ready', () => {
